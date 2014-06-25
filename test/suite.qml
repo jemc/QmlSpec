@@ -6,8 +6,8 @@ import QmlSpec 1.0
 TestSuite {
   name: "Main Suite"
   
-  testComponents: [
-    Qt.createComponent("./tst_TestCase.qml")
+  testFiles: [
+    Qt.resolvedUrl("tst_TestCase.qml")
   ]
   
   Component.onCompleted: run()

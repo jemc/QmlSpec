@@ -9,7 +9,8 @@ Item {
   
   property var name: String(root)
   
-  property var testComponents
+  property var testFiles: []
+  property var testComponents: []
   
   property var testReporter: TestReporterConsole { }
   
@@ -17,11 +18,16 @@ Item {
   signal finished()
   
   function run() {
+    // Gather testComponents and testFiles into allTestComponents
+    var allTestComponents = testComponents.slice(0)
+    for(var i in testFiles)
+      allTestComponents.push(Qt.createComponent(testFiles[i]))
+    
     try {
       testReporter.suiteBegin({ name: root.name })
       
-      for(var i in testComponents) {
-        var testComponent = testComponents[i]
+      for(var i in allTestComponents) {
+        var testComponent = allTestComponents[i]
         var testObjectParent = root
         
         // Fill these with anonymous functions that can be connected to signals
