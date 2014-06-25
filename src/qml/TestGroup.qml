@@ -61,12 +61,6 @@ Item {
   // Default implementation runs a single test with data: undefined
   function init_data() { return [undefined] }
   
-  // Default implementations do nothing
-  function initTestCase() {}
-  function init() {}
-  function cleanup() {}
-  function cleanupTestCase() {}
-  
   ///
   // Private API
   
@@ -80,7 +74,10 @@ Item {
     var result = true
     
     var noData = function() { return [undefined] }
-    _runTest("initTestCase", initTestCase, noData, true)
+    var beforeAll = _selectFunction(root['beforeAll'], root['initTestCase'])
+    var afterAll  = _selectFunction(root['afterAll'],  root['cleanupTestCase'])
+    
+    _runTest("beforeAll", beforeAll, noData, true)
     
     for(var propName in root) {
       if(propName.slice(0, 5) === "test_"
@@ -95,7 +92,7 @@ Item {
       }
     }
     
-    _runTest("cleanupTestCase", cleanupTestCase, noData, true)
+    _runTest("afterAll", afterAll, noData, true)
     
     testReporter.groupEnd({ name: root.name })
     return result
@@ -113,9 +110,12 @@ Item {
       for(var i in dataRows) {
         dataRow = dataRows[i]
         
-        if(!dontSurround) init()
+        var before = _selectFunction(root['before'], root['init'])
+        var after  = _selectFunction(root['after'],  root['cleanup'])
+        
+        if(!dontSurround) before()
         returnValue = testFunction(dataRow)
-        if(!dontSurround) cleanup()
+        if(!dontSurround) after()
       }
     }
     catch(exc) {
@@ -143,5 +143,12 @@ Item {
     skipLevels = skipLevels || 1
     try      { _getStack.missingMethod() }
     catch(e) { return e.stack.split("\n").slice(skipLevels).join("\n") }
+  }
+  
+  function _selectFunction(func1, func2, func3) {
+    if('function' === typeof func1) return func1
+    if('function' === typeof func2) return func2
+    if('function' === typeof func3) return func3
+    return function() { } // Return empty function by default
   }
 }
