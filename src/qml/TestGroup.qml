@@ -47,10 +47,14 @@ Item {
     
     try { testFunction() }
     catch(exc) {
-      exc.name = testName
-      if     (exc.testResult === 'failure') testReporter.testFailure(exc)
-      else if(exc.testResult === 'pending') testReporter.testPending(exc)
-      else                                  testReporter.testError(exc)
+      var info = {}
+      var infoKeys = Object.getOwnPropertyNames(exc)
+      for(var i in infoKeys) info[infoKeys[i]] = exc[infoKeys[i]]
+      info.name = testName
+      
+      if     (info.testResult === 'failure') testReporter.testFailure(info)
+      else if(info.testResult === 'pending') testReporter.testPending(info)
+      else                                   testReporter.testError(info)
       return false
     }
     

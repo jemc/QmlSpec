@@ -48,4 +48,15 @@ TestReporter {
       )
     )
   }
+  
+  onTestError: {
+    totalErrored += 1
+    console.log(
+      "ERROR! : %1::%2() %3".arg(currentGroupName).arg(test.name) +"\n"+
+      "   Message  : %1".arg(inspect(test.message))               +"\n"+
+      "   Stack    : " + test.stack.split("\n").join(
+    "\n            : "
+      )
+    )
+  }
 }

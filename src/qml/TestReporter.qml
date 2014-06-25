@@ -14,15 +14,15 @@ Item {
   signal testBegin(variant test)
   signal testSuccess(variant test)
   signal testFailure(variant test)
-  // signal testError(variant test)
+  signal testError(variant test)
   // signal testPending(variant test)
   
   function inspect(obj) {
     var type = typeof obj
     
-    if(type == 'number') return JSON.stringify(obj)
-    else return "TestReporter#inspect has no handler for type '%1' yet".arg(type)
-    return JSON.stringify(obj)
+    if     (type === 'number') return JSON.stringify(obj)
+    else if(type === 'string') return JSON.stringify(obj)
+    else return "TestReporter#inspect needs a handler for type '%1'".arg(type)
   }
   
 }
