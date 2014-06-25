@@ -7,28 +7,39 @@ Item {
   
   property var testComponents
   
+  property var testRunner: TestRunner { }
+  
+  
   signal finished()
   
   function run() {
-    for(var i in testComponents) {
-      var testComponent = testComponents[i]
-      var testCaseParent = root
-      
-      var createTestCase
-      createTestCase = function() {
-        if (testComponent.status == Component.Ready) {
-          return testComponent.createObject(testCaseParent, {})
-        } 
-        else if (testComponent.status == Component.Loading) {
-          testComponent.statusChanged.connect(createTestCase)
-        } 
-        else if (testComponent.status == Component.Error) {
-          console.log("Error loading testComponent:", testComponent.errorString())
+    try {
+      for(var i in testComponents) {
+        var testComponent = testComponents[i]
+        var testCaseParent = root
+        
+        var createTestCase
+        createTestCase = function() {
+          if (testComponent.status == Component.Ready) {
+            return testComponent.createObject(testCaseParent, {})
+          } 
+          else if (testComponent.status == Component.Loading) {
+            testComponent.statusChanged.connect(createTestCase)
+          } 
+          else if (testComponent.status == Component.Error) {
+            console.log("Error loading testComponent:",
+                        testComponent.errorString())
+          }
         }
+        
+        var testCase = createTestCase()
+        testCase.testRunner = testRunner
+        testCase._run()
       }
-      
-      var testCase = createTestCase()
-      console.log(testCase)
+    }
+    catch(exc) {
+      console.error("ERROR in TestSuite#run: %1\n%2".arg(exc).arg(exc.stack))
+      quit()
     }
     
     finished()
