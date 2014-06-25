@@ -5,6 +5,9 @@ import QtQuick 2.1
 Item {
   id: root
   
+  signal suiteBegin(variant suite)
+  signal suiteEnd(variant suite)
+  
   signal groupBegin(variant group)
   signal groupEnd(variant group)
   

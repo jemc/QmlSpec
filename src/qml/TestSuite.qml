@@ -5,6 +5,8 @@ import QtQuick 2.1
 Item {
   id: root
   
+  property var name: ""
+  
   property var testComponents
   
   property var testRunner: TestRunnerConsole { }
@@ -14,6 +16,8 @@ Item {
   
   function run() {
     try {
+      testRunner.suiteBegin({ name: root.name })
+      
       for(var i in testComponents) {
         var testComponent = testComponents[i]
         var testCaseParent = root
@@ -36,6 +40,8 @@ Item {
         testCase.testRunner = testRunner
         testCase._run()
       }
+      
+      testRunner.suiteEnd({ name: root.name })
     }
     catch(exc) {
       console.error("ERROR in TestSuite#run: %1\n%2".arg(exc).arg(exc.stack))
