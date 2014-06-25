@@ -31,18 +31,21 @@ TestReporter {
   
   onTestSuccess: {
     totalPassed += 1
+    var rowText = test.dataRow === undefined ? "" : inspect(test.dataRow)
     console.log(
-      "PASS   : %1::%2()".arg(currentGroupName).arg(test.name)
+      "PASS   : %1::%2(%3)".arg(currentGroupName).arg(test.name)
+                           .arg(rowText)
     )
   }
   
   onTestFailure: {
     totalFailed += 1
+    var rowText = test.dataRow === undefined ? "" : inspect(test.dataRow)
     console.log(
-      "FAIL!  : %1::%2() %3".arg(currentGroupName).arg(test.name)
-                            .arg(test.message)       +"\n"+
-      "   Actual   : %1".arg(inspect(test.actual))   +"\n"+
-      "   Expected : %1".arg(inspect(test.expected)) +"\n"+
+      "FAIL!  : %1::%2(%3) %4".arg(currentGroupName).arg(test.name)
+                              .arg(rowText).arg(test.message) +"\n"+
+      "   Actual   : %1".arg(inspect(test.actual))            +"\n"+
+      "   Expected : %1".arg(inspect(test.expected))          +"\n"+
       "   Stack    : " + test.stack.split("\n").join(
     "\n            : "
       )
@@ -51,9 +54,11 @@ TestReporter {
   
   onTestError: {
     totalErrored += 1
+    var rowText = test.dataRow === undefined ? "" : inspect(test.dataRow)
     console.log(
-      "ERROR! : %1::%2() %3".arg(currentGroupName).arg(test.name) +"\n"+
-      "   Message  : %1".arg(inspect(test.message))               +"\n"+
+      "ERROR! : %1::%2(%3)".arg(currentGroupName).arg(test.name)
+                           .arg(rowText)            +"\n"+
+      "   Message  : %1".arg(inspect(test.message)) +"\n"+
       "   Stack    : " + test.stack.split("\n").join(
     "\n            : "
       )

@@ -33,24 +33,45 @@ Item {
     
     var result = true
     
-    for(var propName in root)
-      if(propName.slice(0, 5) == "test_"
-      && typeof root[propName] == 'function')
-        result = _runTest(propName, root[propName]) && result
+    for(var propName in root) {
+      if(propName.slice(0, 5) === "test_"
+      && propName.slice(propName.length-5, propName.length) !== "_data"
+      && 'function' === typeof root[propName]) {
+        var testDataFunction
+        if('function' === typeof root['init_data'])
+          testDataFunction   =   root['init_data']
+        if('function' === typeof root[propName+'_data'])
+          testDataFunction   =   root[propName+'_data']
+        
+        result = _runTest(propName, root[propName], testDataFunction) && result
+      }
+    }
     
     testReporter.groupEnd({ name: root.name })
     return result
   }
   
-  function _runTest(testName, testFunction) {
+  function _runTest(testName, testFunction, testDataFunction) {
     testReporter.testBegin({ name: testName })
     
-    try { testFunction() }
+    var dataRow
+    var returnValue
+    
+    try {
+      var dataRows = [undefined] // Run a single test with data: undefined
+      if('function' === typeof testDataFunction) dataRows = testDataFunction()
+      
+      for(var i in dataRows) {
+        dataRow = dataRows[i]
+        returnValue = testFunction(dataRow)
+      }
+    }
     catch(exc) {
       var info = {}
       var infoKeys = Object.getOwnPropertyNames(exc)
       for(var i in infoKeys) info[infoKeys[i]] = exc[infoKeys[i]]
-      info.name = testName
+      info.name    = testName
+      info.dataRow = dataRow
       
       if     (info.testResult === 'failure') testReporter.testFailure(info)
       else if(info.testResult === 'pending') testReporter.testPending(info)
@@ -58,7 +79,11 @@ Item {
       return false
     }
     
-    testReporter.testSuccess({ name: testName })
+    testReporter.testSuccess({
+      name:        testName,
+      dataRow:     dataRow,
+      returnValue: returnValue
+    })
     return true
   }
   
