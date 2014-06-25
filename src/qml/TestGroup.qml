@@ -58,9 +58,6 @@ Item {
   function wait(ms)  { QTest.qWait(ms) }
   function sleep(ms) { QTest.qSleep(ms) }
   
-  // Default implementation runs a single test with data: undefined
-  function init_data() { return [undefined] }
-  
   ///
   // Private API
   
@@ -74,8 +71,8 @@ Item {
     var result = true
     
     var noData = function() { return [undefined] }
-    var beforeAll = _selectFunction(root['beforeAll'], root['initTestCase'])
-    var afterAll  = _selectFunction(root['afterAll'],  root['cleanupTestCase'])
+    var beforeAll = _detectFunction(root['beforeAll'], root['initTestCase'])
+    var afterAll  = _detectFunction(root['afterAll'],  root['cleanupTestCase'])
     
     _runTest("beforeAll", beforeAll, noData, true)
     
@@ -83,11 +80,11 @@ Item {
       if(propName.slice(0, 5) === "test_"
       && propName.slice(propName.length-5, propName.length) !== "_data"
       && 'function' === typeof root[propName]) {
-        var testDataFunction =
-          ('function' === typeof root[propName+'_data']) ?
-            root[propName+'_data'] :
-            root['init_data']
-        
+        var testDataFunction = _detectFunction(
+          root[propName+'_data'],
+          root['init_data'],
+          function() { return [undefined] }
+        )
         result = _runTest(propName, root[propName], testDataFunction) && result
       }
     }
@@ -110,8 +107,8 @@ Item {
       for(var i in dataRows) {
         dataRow = dataRows[i]
         
-        var before = _selectFunction(root['before'], root['init'])
-        var after  = _selectFunction(root['after'],  root['cleanup'])
+        var before = _detectFunction(root['before'], root['init'])
+        var after  = _detectFunction(root['after'],  root['cleanup'])
         
         if(!dontSurround) before()
         returnValue = testFunction(dataRow)
@@ -145,10 +142,14 @@ Item {
     catch(e) { return e.stack.split("\n").slice(skipLevels).join("\n") }
   }
   
-  function _selectFunction(func1, func2, func3) {
-    if('function' === typeof func1) return func1
-    if('function' === typeof func2) return func2
-    if('function' === typeof func3) return func3
-    return function() { } // Return empty function by default
+  // Return the first object in the passed arguments that is a function.
+  // If no function was found, return a new empty function.
+  function _detectFunction() {
+    var args = Array.prototype.slice.apply(arguments)
+    for(var i in args)
+      if('function' === typeof args[i])
+        return args[i]
+    
+    return function() { }
   }
 }
