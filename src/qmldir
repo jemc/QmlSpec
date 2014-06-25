@@ -12,3 +12,5 @@ TestSuite            1.0  qml/TestSuite.qml
 
 TestReporter         1.0  qml/TestReporter.qml
 TestReporterConsole  1.0  qml/TestReporterConsole.qml
+
+SignalSpy            1.0  qml/SignalSpy.qml
