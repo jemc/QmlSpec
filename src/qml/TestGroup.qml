@@ -61,6 +61,12 @@ Item {
   // Default implementation runs a single test with data: undefined
   function init_data() { return [undefined] }
   
+  // Default implementations do nothing
+  function initTestCase() {}
+  function init() {}
+  function cleanup() {}
+  function cleanupTestCase() {}
+  
   ///
   // Private API
   
@@ -72,6 +78,9 @@ Item {
     testReporter.groupBegin({ name: root.name })
     
     var result = true
+    
+    var noData = function() { return [undefined] }
+    _runTest("initTestCase", initTestCase, noData, true)
     
     for(var propName in root) {
       if(propName.slice(0, 5) === "test_"
@@ -86,11 +95,13 @@ Item {
       }
     }
     
+    _runTest("cleanupTestCase", cleanupTestCase, noData, true)
+    
     testReporter.groupEnd({ name: root.name })
     return result
   }
   
-  function _runTest(testName, testFunction, testDataFunction) {
+  function _runTest(testName, testFunction, testDataFunction, dontSurround) {
     testReporter.testBegin({ name: testName })
     
     var dataRow
@@ -101,7 +112,10 @@ Item {
       
       for(var i in dataRows) {
         dataRow = dataRows[i]
+        
+        if(!dontSurround) init()
         returnValue = testFunction(dataRow)
+        if(!dontSurround) cleanup()
       }
     }
     catch(exc) {
