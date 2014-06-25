@@ -14,8 +14,8 @@ Item {
   signal testBegin(variant test)
   signal testSuccess(variant test)
   signal testFailure(variant test)
-  signal testError(variant test)
-  // signal testPending(variant test)
+  signal testErrored(variant test)
+  signal testSkipped(variant test)
   
   function inspect(obj) {
     var type = typeof obj

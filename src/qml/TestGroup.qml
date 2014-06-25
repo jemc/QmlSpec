@@ -45,6 +45,16 @@ Item {
     })
   }
   
+  function skip(message) {
+    message = message || ""
+    
+    throw({
+      testResult: 'skip',
+      message: message,
+      stack: _getStack()
+    })
+  }
+  
   function wait(ms)  { QTest.qWait(ms) }
   function sleep(ms) { QTest.qSleep(ms) }
   
@@ -101,8 +111,8 @@ Item {
       info.dataRow = dataRow
       
       if     (info.testResult === 'failure') testReporter.testFailure(info)
-      else if(info.testResult === 'pending') testReporter.testPending(info)
-      else                                   testReporter.testError(info)
+      else if(info.testResult === 'skip')    testReporter.testSkipped(info)
+      else                                   testReporter.testErrored(info)
       return false
     }
     

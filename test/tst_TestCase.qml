@@ -63,6 +63,10 @@ Item {
     function test_fail() {
       fail("should fail")
     }
+    
+    function test_skip() {
+      skip("should skip")
+    }
   }
   
 }

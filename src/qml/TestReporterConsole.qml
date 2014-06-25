@@ -52,7 +52,7 @@ TestReporter {
     )
   }
   
-  onTestError: {
+  onTestErrored: {
     totalErrored += 1
     var rowText = test.dataRow === undefined ? "" : inspect(test.dataRow)
     console.log(
@@ -62,6 +62,16 @@ TestReporter {
       "   Stack    : " + test.stack.split("\n").join(
     "\n            : "
       )
+    )
+  }
+  
+  onTestSkipped: {
+    totalSkipped += 1
+    var rowText = test.dataRow === undefined ? "" : inspect(test.dataRow)
+    console.log(
+      "SKIP   : %1::%2(%3) %4".arg(currentGroupName).arg(test.name)
+                              .arg(rowText).arg(test.message) +"\n"+
+      "   Location : " + test.stack.split("\n")[1]
     )
   }
 }
