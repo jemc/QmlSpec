@@ -24,13 +24,17 @@ Item {
         var testComponent = testComponents[i]
         var testObjectParent = root
         
-        var createTestObject
-        createTestObject = function() {
+        // Fill these with anonymous functions that can be connected to signals
+        var createTestObjects
+        var runTestObjects
+        
+        // Call runTestObjects() as soon as the Component is ready
+        createTestObjects = function() {
           if (testComponent.status == Component.Ready) {
-            return testComponent.createObject(testObjectParent, {})
+            runTestObjects()
           } 
           else if (testComponent.status == Component.Loading) {
-            testComponent.statusChanged.connect(createTestObject)
+            testComponent.statusChanged.connect(createTestObjects)
           } 
           else if (testComponent.status == Component.Error) {
             console.log("Error loading testComponent:",
@@ -38,14 +42,21 @@ Item {
           }
         }
         
-        createTestObject()
-        
-        for(var j = TestGroupRegistry.testGroups.length - 1; j >= 0; j--) {
-          var testGroup = TestGroupRegistry.testGroups[j]
-          testGroup.testReporter = testReporter
-          testGroup._run()
+        // Create the instance from the Component and run tests
+        runTestObjects = function() {
+          TestGroupRegistry.clear()
+          var toplevel = testComponent.createObject(testObjectParent, {})
+          var testGroups = TestGroupRegistry.testGroups.slice(0)
+          TestGroupRegistry.clear()
+          
+          for(var j = testGroups.length - 1; j >= 0; j--) {
+            var testGroup = testGroups[j]
+            testGroup.testReporter = testReporter
+            testGroup._run()
+          }
         }
-        TestGroupRegistry.clear()
+        
+        createTestObjects()
       }
       
       testReporter.suiteEnd({ name: root.name })

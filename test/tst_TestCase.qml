@@ -52,7 +52,6 @@ Item {
   TestCase {
     name: "MiscTests"
     
-    
     function test_verify() {
       verify(true, "should pass")
     }
