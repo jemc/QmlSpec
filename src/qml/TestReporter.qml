@@ -20,9 +20,10 @@ Item {
   function inspect(obj) {
     var type = typeof obj
     
-    if     (type === 'number') return JSON.stringify(obj)
-    else if(type === 'string') return JSON.stringify(obj)
-    else if(type === 'object') return JSON.stringify(obj)
+    if     (type === 'boolean') return JSON.stringify(obj)
+    else if(type === 'number')  return JSON.stringify(obj)
+    else if(type === 'string')  return JSON.stringify(obj)
+    else if(type === 'object')  return JSON.stringify(obj)
     else return "TestReporter#inspect needs a handler for type '%1'".arg(type)
   }
   

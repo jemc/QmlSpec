@@ -21,6 +21,18 @@ Item {
     })
   }
   
+  function verify(condition, message) {
+    message = message || ""
+    
+    if(!condition) throw({
+      testResult: 'failure',
+      actual: condition,
+      expected: true,
+      message: message,
+      stack: _getStack()
+    })
+  }
+  
   ///
   // Private API
   

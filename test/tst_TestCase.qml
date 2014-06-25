@@ -48,4 +48,18 @@ Item {
     }
   }
   
+  // Miscellaneous TestCase API capabilities not covered in examples
+  TestCase {
+    name: "MiscTests"
+    
+    
+    function test_verify() {
+      verify(true, "should pass")
+    }
+    
+    function test_verify_fail() {
+      verify(false, "should fail")
+    }
+  }
+  
 }
