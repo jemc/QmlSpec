@@ -1,6 +1,8 @@
 
 module QmlSpec
 
+plugin QmlSpec
+
 singleton TestGroupRegistry  1.0  qml/TestGroupRegistry.qml
 
 TestCase             1.0  qml/TestGroup.qml
