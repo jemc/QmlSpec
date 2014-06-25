@@ -1,0 +1,5 @@
+
+module QmlSpec
+
+TestCase   1.0  qml/TestCase.qml
+TestSuite  1.0  qml/TestSuite.qml

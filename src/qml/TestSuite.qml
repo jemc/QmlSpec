@@ -1,0 +1,50 @@
+
+import QtQuick 2.1
+
+
+Item {
+  id: root
+  
+  property var testComponents
+  
+  signal finished()
+  
+  function run() {
+    for(var i in testComponents) {
+      var testComponent = testComponents[i]
+      var testCaseParent = root
+      
+      var createTestCase
+      createTestCase = function() {
+        if (testComponent.status == Component.Ready) {
+          return testComponent.createObject(testCaseParent, {})
+        } 
+        else if (testComponent.status == Component.Loading) {
+          testComponent.statusChanged.connect(createTestCase)
+        } 
+        else if (testComponent.status == Component.Error) {
+          console.log("Error loading testComponent:", testComponent.errorString())
+        }
+      }
+      
+      var testCase = createTestCase()
+      console.log(testCase)
+    }
+    
+    finished()
+  }
+  
+  function quit() {
+    quitTimer.start()
+  }
+  
+  // This is an ugly hack, here because
+  // Qt.quit() does not work if called too soon after creation.
+  // This timer will keep trying to quit every millisecond...
+  Timer {
+    id: quitTimer
+    interval: 1
+    repeat: true
+    onTriggered: Qt.quit()
+  }
+}
