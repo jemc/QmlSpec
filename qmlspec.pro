@@ -1,8 +1,7 @@
 
 TEMPLATE = lib
 
-CONFIG += plugin \
-          c++11
+CONFIG += plugin
 QT += qml quick testlib
 
 TARGET = $$qtLibraryTarget(QmlSpec)
