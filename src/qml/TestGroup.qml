@@ -24,7 +24,7 @@ Item {
   ///
   // Private API
   
-  Component.onCompleted: TestCaseRegistry.register(root)
+  Component.onCompleted: TestGroupRegistry.register(root)
   
   property var testReporter
   

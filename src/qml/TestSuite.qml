@@ -40,12 +40,12 @@ Item {
         
         createTestObject()
         
-        for(var j in TestCaseRegistry.testCases) {
-          var testCase = TestCaseRegistry.testCases[j]
-          testCase.testReporter = testReporter
-          testCase._run()
+        for(var j in TestGroupRegistry.testGroups) {
+          var testGroup = TestGroupRegistry.testGroups[j]
+          testGroup.testReporter = testReporter
+          testGroup._run()
         }
-        TestCaseRegistry.clear()
+        TestGroupRegistry.clear()
       }
       
       testReporter.suiteEnd({ name: root.name })
