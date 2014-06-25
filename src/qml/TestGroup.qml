@@ -33,6 +33,21 @@ Item {
     })
   }
   
+  function fail(message) {
+    message = message || ""
+    
+    throw({
+      testResult: 'failure',
+      actual: undefined,
+      expected: undefined,
+      message: message,
+      stack: _getStack()
+    })
+  }
+  
+  function wait(ms)  { QTest.qWait(ms) }
+  function sleep(ms) { QTest.qSleep(ms) }
+  
   ///
   // Private API
   

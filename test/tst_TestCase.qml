@@ -15,7 +15,7 @@ Item {
     }
     
     function test_fail() {
-      compare(2 + 2, 5, "2 + 2 = 5")
+      compare(2 + 2, 5, "2 + 2 = 5 should fail")
     }
   }
   
@@ -58,6 +58,10 @@ Item {
     
     function test_verify_fail() {
       verify(false, "should fail")
+    }
+    
+    function test_fail() {
+      fail("should fail")
     }
   }
   
