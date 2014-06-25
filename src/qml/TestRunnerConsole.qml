@@ -41,8 +41,8 @@ TestRunner {
     console.log(
       "FAIL!  : %1::%2() %3".arg(currentGroupName).arg(test.name)
                             .arg(test.message)       +"\n"+
-      "   Expected : %1".arg(inspect(test.expected)) +"\n"+
       "   Actual   : %1".arg(inspect(test.actual))   +"\n"+
+      "   Expected : %1".arg(inspect(test.expected)) +"\n"+
       "   Stack    : " + test.stack.split("\n").join(
     "\n            : "
       )
