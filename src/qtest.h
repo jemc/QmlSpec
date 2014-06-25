@@ -5,16 +5,18 @@
 #include <QtQml>
 
 
-class QmlSpec_QTest : public QObject
-{
-    Q_OBJECT
-    
-public:
-    
-    static QObject* qmlAttachedProperties(QObject* object);
-};
+namespace QmlSpec {
+  class QTest : public QObject
+  {
+      Q_OBJECT
+      
+  public:
+      
+      static QObject* qmlAttachedProperties(QObject* object);
+  };
+}
 
 
-QML_DECLARE_TYPEINFO(QmlSpec_QTest, QML_HAS_ATTACHED_PROPERTIES)
+QML_DECLARE_TYPEINFO(QmlSpec::QTest, QML_HAS_ATTACHED_PROPERTIES)
 
 #endif

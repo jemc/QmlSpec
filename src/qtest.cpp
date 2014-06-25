@@ -5,7 +5,7 @@
 #include "qtest_attached.h"
 
 
-QObject* QmlSpec_QTest::qmlAttachedProperties(QObject* object)
+QObject* QmlSpec::QTest::qmlAttachedProperties(QObject* object)
 {
-    return new QmlSpec_QTestAttached(object);
+    return new QmlSpec::QTestAttached(object);
 }
