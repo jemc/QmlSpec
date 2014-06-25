@@ -7,7 +7,7 @@ Item {
   
   property var testComponents
   
-  property var testRunner: TestRunner { }
+  property var testRunner: TestRunnerConsole { }
   
   
   signal finished()
