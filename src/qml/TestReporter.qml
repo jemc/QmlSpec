@@ -19,8 +19,10 @@ Item {
   
   function inspect(obj) {
     var type = typeof obj
+    var isQtObject = (obj === Object.prototype.constructor(obj))
     
-    if     (type === 'boolean')   return JSON.stringify(obj)
+    if     (isQtObject)           return String(obj)
+    else if(type === 'boolean')   return JSON.stringify(obj)
     else if(type === 'undefined') return 'undefined'
     else if(type === 'number')    return JSON.stringify(obj)
     else if(type === 'string')    return JSON.stringify(obj)
