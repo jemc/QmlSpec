@@ -1,6 +1,8 @@
 
 import QtQuick 2.1
 
+import QmlSpec 1.0
+
 
 Item {
   id: root
@@ -20,15 +22,15 @@ Item {
       
       for(var i in testComponents) {
         var testComponent = testComponents[i]
-        var testCaseParent = root
+        var testObjectParent = root
         
-        var createTestCase
-        createTestCase = function() {
+        var createTestObject
+        createTestObject = function() {
           if (testComponent.status == Component.Ready) {
-            return testComponent.createObject(testCaseParent, {})
+            return testComponent.createObject(testObjectParent, {})
           } 
           else if (testComponent.status == Component.Loading) {
-            testComponent.statusChanged.connect(createTestCase)
+            testComponent.statusChanged.connect(createTestObject)
           } 
           else if (testComponent.status == Component.Error) {
             console.log("Error loading testComponent:",
@@ -36,9 +38,14 @@ Item {
           }
         }
         
-        var testCase = createTestCase()
-        testCase.testRunner = testRunner
-        testCase._run()
+        createTestObject()
+        
+        for(var j in TestCaseRegistry.testCases) {
+          var testCase = TestCaseRegistry.testCases[j]
+          testCase.testRunner = testRunner
+          testCase._run()
+        }
+        TestCaseRegistry.clear()
       }
       
       testRunner.suiteEnd({ name: root.name })

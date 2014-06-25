@@ -1,6 +1,8 @@
 
 import QtQuick 2.1
 
+import QmlSpec 1.0
+
 
 Item {
   id: root
@@ -22,6 +24,8 @@ Item {
   ///
   // Private API
   
+  Component.onCompleted: TestCaseRegistry.register(root)
+  
   property var testRunner
   
   function _run() {
@@ -29,10 +33,10 @@ Item {
     
     var result = true
     
-    for(var propName in this)
+    for(var propName in root)
       if(propName.slice(0, 5) == "test_"
-      && typeof this[propName] == 'function')
-        result = _runTest(propName, this[propName]) && result
+      && typeof root[propName] == 'function')
+        result = _runTest(propName, root[propName]) && result
     
     testRunner.groupEnd({ name: root.name })
     return result
