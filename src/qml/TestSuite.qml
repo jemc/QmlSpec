@@ -5,7 +5,7 @@ import QtQuick 2.1
 Item {
   id: root
   
-  property var name: ""
+  property var name: String(this)
   
   property var testComponents
   
