@@ -7,7 +7,7 @@ import QmlSpec 1.0
 Item {
   id: root
   
-  property var name: String(this)
+  property var name: String(root)
   
   property var testComponents
   
@@ -40,7 +40,7 @@ Item {
         
         createTestObject()
         
-        for(var j in TestGroupRegistry.testGroups) {
+        for(var j = TestGroupRegistry.testGroups.length - 1; j >= 0; j--) {
           var testGroup = TestGroupRegistry.testGroups[j]
           testGroup.testReporter = testReporter
           testGroup._run()
