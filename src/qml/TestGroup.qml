@@ -58,6 +58,9 @@ Item {
   function wait(ms)  { QTest.qWait(ms) }
   function sleep(ms) { QTest.qSleep(ms) }
   
+  // Default implementation runs a single test with data: undefined
+  function init_data() { return [undefined] }
+  
   ///
   // Private API
   
@@ -74,11 +77,10 @@ Item {
       if(propName.slice(0, 5) === "test_"
       && propName.slice(propName.length-5, propName.length) !== "_data"
       && 'function' === typeof root[propName]) {
-        var testDataFunction
-        if('function' === typeof root['init_data'])
-          testDataFunction   =   root['init_data']
-        if('function' === typeof root[propName+'_data'])
-          testDataFunction   =   root[propName+'_data']
+        var testDataFunction =
+          ('function' === typeof root[propName+'_data']) ?
+            root[propName+'_data'] :
+            root['init_data']
         
         result = _runTest(propName, root[propName], testDataFunction) && result
       }
@@ -95,8 +97,7 @@ Item {
     var returnValue
     
     try {
-      var dataRows = [undefined] // Run a single test with data: undefined
-      if('function' === typeof testDataFunction) dataRows = testDataFunction()
+      var dataRows = testDataFunction()
       
       for(var i in dataRows) {
         dataRow = dataRows[i]
