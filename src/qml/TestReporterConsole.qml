@@ -11,6 +11,7 @@ TestReporter {
   property int totalSkipped: 0
   
   onSuiteBegin: {
+    totalPassed = totalFailed = totalErrored = totalSkipped = 0
     console.log("********* Start testing of %1 *********".arg(suite.name))
   }
   
