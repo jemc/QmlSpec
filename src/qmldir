@@ -3,7 +3,7 @@ module QmlSpec
 
 singleton TestCaseRegistry  1.0  qml/TestCaseRegistry.qml
 
-TestCase           1.0  qml/TestCase.qml
-TestSuite          1.0  qml/TestSuite.qml
-TestRunner         1.0  qml/TestRunner.qml
-TestRunnerConsole  1.0  qml/TestRunnerConsole.qml
+TestCase             1.0  qml/TestCase.qml
+TestSuite            1.0  qml/TestSuite.qml
+TestReporter         1.0  qml/TestReporter.qml
+TestReporterConsole  1.0  qml/TestReporterConsole.qml

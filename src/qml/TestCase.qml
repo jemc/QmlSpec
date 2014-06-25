@@ -26,10 +26,10 @@ Item {
   
   Component.onCompleted: TestCaseRegistry.register(root)
   
-  property var testRunner
+  property var testReporter
   
   function _run() {
-    testRunner.groupBegin({ name: root.name })
+    testReporter.groupBegin({ name: root.name })
     
     var result = true
     
@@ -38,23 +38,23 @@ Item {
       && typeof root[propName] == 'function')
         result = _runTest(propName, root[propName]) && result
     
-    testRunner.groupEnd({ name: root.name })
+    testReporter.groupEnd({ name: root.name })
     return result
   }
   
   function _runTest(testName, testFunction) {
-    testRunner.testBegin({ name: testName })
+    testReporter.testBegin({ name: testName })
     
     try { testFunction() }
     catch(exc) {
       exc.name = testName
-      if     (exc.testResult === 'failure') testRunner.testFailure(exc)
-      else if(exc.testResult === 'pending') testRunner.testPending(exc)
-      else                                  testRunner.testError(exc)
+      if     (exc.testResult === 'failure') testReporter.testFailure(exc)
+      else if(exc.testResult === 'pending') testReporter.testPending(exc)
+      else                                  testReporter.testError(exc)
       return false
     }
     
-    testRunner.testSuccess({ name: testName })
+    testReporter.testSuccess({ name: testName })
     return true
   }
   

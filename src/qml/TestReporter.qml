@@ -21,7 +21,7 @@ Item {
     var type = typeof obj
     
     if(type == 'number') return JSON.stringify(obj)
-    else return "TestRunner#inspect has no handler for type '%1' yet".arg(type)
+    else return "TestReporter#inspect has no handler for type '%1' yet".arg(type)
     return JSON.stringify(obj)
   }
   

@@ -2,7 +2,7 @@
 import QtQuick 2.1
 
 
-TestRunner {
+TestReporter {
   id: root
   
   property int totalPassed:  0

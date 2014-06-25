@@ -11,14 +11,14 @@ Item {
   
   property var testComponents
   
-  property var testRunner: TestRunnerConsole { }
+  property var testReporter: TestReporterConsole { }
   
   
   signal finished()
   
   function run() {
     try {
-      testRunner.suiteBegin({ name: root.name })
+      testReporter.suiteBegin({ name: root.name })
       
       for(var i in testComponents) {
         var testComponent = testComponents[i]
@@ -42,13 +42,13 @@ Item {
         
         for(var j in TestCaseRegistry.testCases) {
           var testCase = TestCaseRegistry.testCases[j]
-          testCase.testRunner = testRunner
+          testCase.testReporter = testReporter
           testCase._run()
         }
         TestCaseRegistry.clear()
       }
       
-      testRunner.suiteEnd({ name: root.name })
+      testReporter.suiteEnd({ name: root.name })
     }
     catch(exc) {
       console.error("ERROR in TestSuite#run: %1\n%2".arg(exc).arg(exc.stack))
