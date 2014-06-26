@@ -17,7 +17,7 @@ TestReporter {
   
   onSuiteEnd: {
     console.log(
-      "Totals: %1 passed, %2 failed, %3 errored, %4 skipped"
+      "Totals : %1 passed, %2 failed, %3 errored, %4 skipped"
         .arg(totalPassed).arg(totalFailed).arg(totalErrored).arg(totalSkipped)
     )
     console.log("********* Finished testing of %1 *********\n".arg(suite.name))
