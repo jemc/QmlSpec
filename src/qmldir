@@ -3,6 +3,7 @@ module QmlSpec
 
 plugin QmlSpec
 
+singleton TestUtil           1.0  qml/TestUtil.qml
 singleton TestGroupRegistry  1.0  qml/TestGroupRegistry.qml
 
 TestCase             1.0  qml/TestGroup.qml

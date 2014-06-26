@@ -1,6 +1,8 @@
 
 import QtQuick 2.1
 
+import QmlSpec 1.0
+
 
 Item {
   id: root
@@ -17,17 +19,5 @@ Item {
   signal testErrored(variant test)
   signal testSkipped(variant test)
   
-  function inspect(obj) {
-    var type = typeof obj
-    var isQtObject = (obj === Object.prototype.constructor(obj))
-    
-    if     (isQtObject)           return String(obj)
-    else if(type === 'boolean')   return JSON.stringify(obj)
-    else if(type === 'undefined') return 'undefined'
-    else if(type === 'number')    return JSON.stringify(obj)
-    else if(type === 'string')    return JSON.stringify(obj)
-    else if(type === 'object')    return JSON.stringify(obj)
-    else return "TestReporter#inspect needs a handler for type '%1'".arg(type)
-  }
-  
+  function inspect(obj) { return TestUtil.inspect(obj) }
 }

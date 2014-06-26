@@ -7,7 +7,8 @@ TestSuite {
   name: "Main Suite"
   
   testFiles: [
-    Qt.resolvedUrl("tst_TestCase.qml")
+    Qt.resolvedUrl("tst_TestCase.qml"),
+    Qt.resolvedUrl("tst_TestUtil.qml"),
   ]
   
   Component.onCompleted: run()

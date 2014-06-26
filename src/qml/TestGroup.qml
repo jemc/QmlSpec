@@ -12,7 +12,7 @@ Item {
   function compare(actual, expected, message) {
     message = message || ""
     
-    if(expected !== actual) throw({
+    if(!TestUtil.compare(actual, expected)) throw({
       testResult: 'failure',
       actual: actual,
       expected: expected,
