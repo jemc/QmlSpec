@@ -71,25 +71,24 @@ Item {
     var result = true
     
     var noData = function() { return [undefined] }
-    var beforeAll = _detectFunction(root['beforeAll'], root['initTestCase'])
-    var afterAll  = _detectFunction(root['afterAll'],  root['cleanupTestCase'])
+    var beforeAll = _detectRootFunction('beforeAll', 'initTestCase')
+    var afterAll  = _detectRootFunction('afterAll',  'cleanupTestCase')
     
-    _runTest("beforeAll", beforeAll, noData, true)
+    if(beforeAll) _runTest(beforeAll, root[beforeAll], noData, true)
     
     for(var propName in root) {
       if(propName.slice(0, 5) === "test_"
       && propName.slice(propName.length-5, propName.length) !== "_data"
       && 'function' === typeof root[propName]) {
-        var testDataFunction = _detectFunction(
-          root[propName+'_data'],
-          root['init_data'],
-          function() { return [undefined] }
-        )
+        var testDataFunction = // Get relevant data function or make one with...
+          root[_detectRootFunction(propName+'_data', 'init_data')]
+          || function() { return [undefined] } // one run of data: undefined
+        
         result = _runTest(propName, root[propName], testDataFunction) && result
       }
     }
     
-    _runTest("afterAll", afterAll, noData, true)
+    if(afterAll) _runTest(afterAll, root[afterAll], noData, true)
     
     testReporter.groupEnd({ name: root.name })
     return result
@@ -131,13 +130,13 @@ Item {
     for(var i in allDataRows) {
       dataRow = allDataRows[i]
       
-      var before = _detectFunction(root['before'], root['init'])
-      var after  = _detectFunction(root['after'],  root['cleanup'])
+      var before = _detectRootFunction('before', 'init')
+      var after  = _detectRootFunction('after',  'cleanup')
       
       runProtected(function() {
-        if(!dontSurround) before()
+        if(before && !dontSurround) root[before]()
         returnValue = testFunction(dataRow)
-        if(!dontSurround) after()
+        if(after  && !dontSurround) root[after]()
       })
     }
     
@@ -150,14 +149,14 @@ Item {
     catch(e) { return e.stack.split("\n").slice(skipLevels).join("\n") }
   }
   
-  // Return the first object in the passed arguments that is a function.
-  // If no function was found, return a new empty function.
-  function _detectFunction() {
+  // Return the first object in the passed arguments that
+  // is a string that references a function on the root object.
+  // If no function was found, return undefined.
+  function _detectRootFunction() {
     var args = Array.prototype.slice.apply(arguments)
     for(var i in args)
-      if('function' === typeof args[i])
+      if(('string' === typeof args[i])
+      && ('function' === typeof root[args[i]]))
         return args[i]
-    
-    return function() { }
   }
 }
