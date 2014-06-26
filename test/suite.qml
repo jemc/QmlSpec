@@ -7,10 +7,19 @@ TestSuite {
   name: "Main Suite"
   
   testFiles: [
-    Qt.resolvedUrl("tst_TestCase.qml"),
     Qt.resolvedUrl("tst_TestUtil.qml"),
+    Qt.resolvedUrl("tst_TestGroup.qml"),
   ]
   
-  Component.onCompleted: run()
+  Component.onCompleted: { failSuite.run(); run() }
   onFinished: quit()
+  
+  TestSuite {
+    id: failSuite
+    name: "FAIL Suite"
+    
+    testFiles: [
+      Qt.resolvedUrl("tst_TestCase.qml"),
+    ]
+  }
 }
