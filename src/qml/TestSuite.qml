@@ -13,6 +13,7 @@ Item {
   property var testComponents: []
   
   property var testReporter: TestReporterConsole { }
+  property var testRunner: TestRunner { }
   
   
   signal finished()
@@ -57,8 +58,9 @@ Item {
           
           for(var j = testGroups.length - 1; j >= 0; j--) {
             var testGroup = testGroups[j]
-            testGroup.testReporter = testReporter
-            testGroup._run()
+            testRunner.reporter = testReporter
+            testRunner.tests = testGroup
+            testRunner.run()
           }
         }
         

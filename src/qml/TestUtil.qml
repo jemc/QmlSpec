@@ -48,4 +48,12 @@ Item {
       
     return true
   }
+  
+  function getStack(skipLevels) {
+    skipLevels = skipLevels || 0
+    skipLevels += 1
+    try      { _getStack.missingMethod() }
+    catch(e) { return e.stack.split("\n").slice(skipLevels).join("\n") }
+  }
+  
 }

@@ -10,6 +10,7 @@ TestCase             1.0  qml/TestGroup.qml
 TestGroup            1.0  qml/TestGroup.qml
 
 TestSuite            1.0  qml/TestSuite.qml
+TestRunner           1.0  qml/TestRunner.qml
 
 TestReporter         1.0  qml/TestReporter.qml
 TestReporterConsole  1.0  qml/TestReporterConsole.qml
