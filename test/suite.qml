@@ -9,6 +9,7 @@ TestSuite {
   testFiles: [
     Qt.resolvedUrl("tst_TestUtil.qml"),
     Qt.resolvedUrl("tst_TestGroup.qml"),
+    Qt.resolvedUrl("tst_SignalSpy.qml"),
   ]
   
   Component.onCompleted: { failSuite.run(); run() }
