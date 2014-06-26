@@ -58,7 +58,7 @@ Item {
       compare(cleanupTestCaseRan, 1, "cleanupTestCase() should run once")
     }
     
-    Component.onCompleted: {
+    Component.onDestruction: {
       compare(cleanupTestCaseRan, 1, "cleanupTestCase() should run once")
     }
     
@@ -120,7 +120,7 @@ Item {
       compare(afterAllRan,       1, "afterAll() should run once")
     }
     
-    Component.onCompleted: {
+    Component.onDestruction: {
       compare(afterAllRan, 1, "afterAll() should run once")
     }
     
