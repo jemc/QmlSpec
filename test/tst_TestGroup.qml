@@ -8,7 +8,7 @@ Item {
   // Tests for call order of the init and cleanup functions
   // These are the QtTest-compatible versions of the before and after functions
   TestGroup {
-    name: "TestGroup#init/#cleanup"
+    name: "TestGroup init/cleanup"
     
     property var initTestCaseRan: 0
     property var initRan: 0
@@ -70,7 +70,7 @@ Item {
   // Tests for call order of the before and after functions
   // These are the preferred alternative to the init and cleanup functions
   TestGroup {
-    name: "TestGroup#before/#after"
+    name: "TestGroup before/after"
     
     property var beforeAllRan: 0
     property var beforeRan: 0
@@ -127,6 +127,28 @@ Item {
     function test_before_after_functions_1() { do_test(1) }
     function test_before_after_functions_2() { do_test(2) }
     function test_before_after_functions_3() { do_test(3) }
+  }
+  
+  TestCase {
+    name: "TestGroup dataRows"
+    
+    property var gotDataRows: []
+    
+    function test_dataRows_data() {
+      return [
+        { foo: 0, bar: 77 },
+        { foo: 1, bar: 88 },
+        { foo: 2, bar: 99 },
+      ]
+    }
+    
+    function test_dataRows(data) {
+      gotDataRows.push(data)
+    }
+    
+    function afterAll() {
+      compare(gotDataRows, test_dataRows_data())
+    }
   }
   
 }

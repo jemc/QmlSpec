@@ -98,41 +98,49 @@ Item {
   function _runTest(testName, testFunction, testDataFunction, dontSurround) {
     testReporter.testBegin({ name: testName })
     
+    var allDataRows
     var dataRow
     var returnValue
     
-    try {
-      var dataRows = testDataFunction()
+    var runProtected = function(callable, dontReportSuccess) {
+      try { callable() }
+      catch(exc) {
+        var info = {}
+        var infoKeys = Object.getOwnPropertyNames(exc)
+        for(var i in infoKeys) info[infoKeys[i]] = exc[infoKeys[i]]
+        info.name    = testName
+        info.dataRow = dataRow
+        
+        if     (info.testResult === 'failure') testReporter.testFailure(info)
+        else if(info.testResult === 'skip')    testReporter.testSkipped(info)
+        else                                   testReporter.testErrored(info)
+        return false
+      }
       
-      for(var i in dataRows) {
-        dataRow = dataRows[i]
-        
-        var before = _detectFunction(root['before'], root['init'])
-        var after  = _detectFunction(root['after'],  root['cleanup'])
-        
+      if(!dontReportSuccess) {
+        testReporter.testSuccess({
+          name:        testName,
+          dataRow:     dataRow,
+          returnValue: returnValue
+        })
+      }
+    }
+    
+    runProtected(function() { allDataRows = testDataFunction() }, true)
+    
+    for(var i in allDataRows) {
+      dataRow = allDataRows[i]
+      
+      var before = _detectFunction(root['before'], root['init'])
+      var after  = _detectFunction(root['after'],  root['cleanup'])
+      
+      runProtected(function() {
         if(!dontSurround) before()
         returnValue = testFunction(dataRow)
         if(!dontSurround) after()
-      }
-    }
-    catch(exc) {
-      var info = {}
-      var infoKeys = Object.getOwnPropertyNames(exc)
-      for(var i in infoKeys) info[infoKeys[i]] = exc[infoKeys[i]]
-      info.name    = testName
-      info.dataRow = dataRow
-      
-      if     (info.testResult === 'failure') testReporter.testFailure(info)
-      else if(info.testResult === 'skip')    testReporter.testSkipped(info)
-      else                                   testReporter.testErrored(info)
-      return false
+      })
     }
     
-    testReporter.testSuccess({
-      name:        testName,
-      dataRow:     dataRow,
-      returnValue: returnValue
-    })
     return true
   }
   
