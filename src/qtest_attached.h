@@ -3,7 +3,6 @@
 #define QMLSPEC_QTEST_ATTACHED_H
 
 #include <QtQml>
-#include <QTest>
 
 
 namespace QmlSpec {
@@ -22,8 +21,19 @@ namespace QmlSpec {
         
     public slots:
         
-        void qWait(int ms)  { ::QTest::qWait(ms); }
-        void qSleep(int ms) { ::QTest::qSleep(ms); }
+        void qSleep(int ms) {
+            QThread::msleep(ms);
+        }
+        
+        void qWait(int ms) {
+            QElapsedTimer timer;
+            timer.start();
+            do {
+                QCoreApplication::processEvents(QEventLoop::AllEvents, ms);
+                QCoreApplication::sendPostedEvents(0, QEvent::DeferredDelete);
+                qSleep(10);
+            } while (timer.elapsed() < ms);
+        }
     };
 }
 

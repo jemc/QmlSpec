@@ -2,7 +2,7 @@
 TEMPLATE = lib
 
 CONFIG += plugin
-QT += qml quick testlib
+QT += qml quick
 
 TARGET = $$qtLibraryTarget(QmlSpec)
 uri = QmlSpec
