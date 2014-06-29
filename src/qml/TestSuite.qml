@@ -16,6 +16,33 @@ Item {
   property var testRunner: TestRunner { }
   
   
+  Loader {
+    id: testLoader
+    active: false
+    
+    function load(component) {
+      TestGroupRegistry.clear()
+      sourceComponent = component
+      active = true
+    }
+    
+    function run() {
+      var testGroups = TestGroupRegistry.testGroups.slice(0)
+      TestGroupRegistry.clear()
+      
+      for(var j = testGroups.length - 1; j >= 0; j--) {
+        var testGroup = testGroups[j]
+        testRunner.reporter = testReporter
+        testRunner.tests = testGroup
+        testRunner.run()
+      }
+      
+      active = false
+    }
+    
+    onStatusChanged: if(status === Loader.Ready) run()
+  }
+  
   signal finished()
   
   function run() {
@@ -29,42 +56,8 @@ Item {
       
       for(var i in allTestComponents) {
         var testComponent = allTestComponents[i]
-        var testObjectParent = root
-        
-        // Fill these with anonymous functions that can be connected to signals
-        var createTestObjects
-        var runTestObjects
-        
-        // Call runTestObjects() as soon as the Component is ready
-        createTestObjects = function() {
-          if (testComponent.status == Component.Ready) {
-            runTestObjects()
-          } 
-          else if (testComponent.status == Component.Loading) {
-            testComponent.statusChanged.connect(createTestObjects)
-          } 
-          else if (testComponent.status == Component.Error) {
-            console.log("Error loading testComponent:",
-                        testComponent.errorString())
-          }
-        }
-        
-        // Create the instance from the Component and run tests
-        runTestObjects = function() {
-          TestGroupRegistry.clear()
-          var toplevel = testComponent.createObject(testObjectParent, {})
-          var testGroups = TestGroupRegistry.testGroups.slice(0)
-          TestGroupRegistry.clear()
-          
-          for(var j = testGroups.length - 1; j >= 0; j--) {
-            var testGroup = testGroups[j]
-            testRunner.reporter = testReporter
-            testRunner.tests = testGroup
-            testRunner.run()
-          }
-        }
-        
-        createTestObjects()
+        testLoader.load(testComponent)
+        while(testLoader.active) QTest.qWait(10)
       }
       
       testReporter.suiteEnd({ name: root.name })
