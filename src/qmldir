@@ -3,6 +3,8 @@ module QmlSpec
 
 plugin QmlSpec
 
+internal  SignalDecoupler         qml/SignalDecoupler.qml
+
 singleton TestUtil           1.0  qml/TestUtil.qml
 singleton TestGroupRegistry  1.0  qml/TestGroupRegistry.qml
 

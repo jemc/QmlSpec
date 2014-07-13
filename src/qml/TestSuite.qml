@@ -45,7 +45,7 @@ Item {
   
   signal finished()
   
-  function run() {
+  function _runNow() {
     // Gather testComponents and testFiles into allTestComponents
     var allTestComponents = testComponents.slice(0)
     for(var i in testFiles)
@@ -70,17 +70,9 @@ Item {
     finished()
   }
   
-  function quit() {
-    quitTimer.start()
-  }
-  
-  // This is an ugly hack, here because
-  // Qt.quit() does not work if called too soon after creation.
-  // This timer will keep trying to quit every millisecond...
-  Timer {
-    id: quitTimer
-    interval: 1
-    repeat: true
-    onTriggered: Qt.quit()
-  }
+  // Use decouplers to break the stack chain and make the calls nonblocking
+  function quit() { quitSignal.trigger() }
+  function run()  { runSignal.trigger() }
+  SignalDecoupler { id: runSignal;   onTriggered: _runNow() }
+  SignalDecoupler { id: quitSignal;  onTriggered: Qt.quit() }
 }
