@@ -11,7 +11,7 @@ to extend from QML-space, and the interface seems to be closely based on
 Qt's C++ testing module rather than being redesigned based on the unique
 strengths and weaknesses of QML.  Also, Being a part of the Qt framework
 it is high in project inertia (for better or for worse), and this makes it
-difficult to petition for new functionality or accomodations for new
+difficult to petition for new functionality or accommodations for new
 functionality.
 
 QmlSpec aims to be a drop-in replacement for QtTest, with new features
@@ -33,7 +33,7 @@ unique needs.
 * Implement almost entirely in QML, with the absolute minimum in C++
 * Graphical TestReporter that can be run in an application
 * Support for user-written TestReporters
-* Extensibility accomodations for unforseen use cases
+* Extensibility accommodations for unforseen use cases
 
 ## Contributing
 
